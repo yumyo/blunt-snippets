@@ -1,6 +1,6 @@
 === Blunt Snippets ===
 Contributors: Hube2
-Tags: 
+Tags: snippets, shortcodes, html, css, javascript, php
 Requires at least: 3.5
 Tested up to: 3.9
 Stable tag: 0.0.1
@@ -14,10 +14,16 @@ Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and
 
 Add HTML, CSS, JavaScript & PHP to content and widgets using shortcodes
 
+Please note that this plugin is design to work with the [Advanced Custom Fields](http://wordpress.org/plugins/advanced-custom-fields/) plugin. It is possible to use this plugin without that plugin, please read the [Other Notes](http://wordpress.org/plugins/blunt-snippets/other_notes/) section for additional information.
+
 == Installation ==
 
-Upload & Activeate Advanced Custom Fields
-Upload & Activate This Plugin
+Upload/Install & Activate This Plugin.
+
+For best experience:
+Upload/Install & Activate [ACF](http://wordpress.org/plugins/advanced-custom-fields/)
+
+== Other Notes ==
 
 
 == Screenshots ==

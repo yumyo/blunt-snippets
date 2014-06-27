@@ -3,10 +3,11 @@
   /*
     Plugin Name: Blunt Snippets
     Plugin URI: https://github.com/Hube2/blunt-snippets
-    Description: Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and widgets using shortcodes. Requires that both ACF installed and active.
+    Description: Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and widgets using shortcodes.
     Author: John A. Huebner II
     Author URI: https://github.com/Hube2
-    Version: 0.0.1
+    Version: 0.0.1.
+		
   */
   
   new bluntSnippets();
