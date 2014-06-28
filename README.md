@@ -8,3 +8,5 @@ This plugin requires that the Advanced Custom Fields plugin by Elliot Condon be 
 Create a code snippet then copy and paste the shortcode to wherever you need to embed it...
 
 ... rather than altering the editors to allow adding code directly into the content editor or text widget.
+
+See readme.txt for more information
