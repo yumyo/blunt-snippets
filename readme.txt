@@ -3,7 +3,7 @@ Contributors: Hube2
 Tags: snippets, shortcodes, embed, html, css, javascript, php
 Requires at least: 3.5
 Tested up to: 3.9
-Stable tag: 1.0.0
+Stable tag: 0.0.1
 Donate link: 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
