@@ -6,7 +6,7 @@
     Description: Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and widgets using shortcodes.
     Author: John A. Huebner II
     Author URI: https://github.com/Hube2
-    Version: 1.0.0
+    Version: 0.0.1
     
     Blunt Snippets
     Copyright (C) 2012, John A. Huebner II, hube02@earthlink.net
