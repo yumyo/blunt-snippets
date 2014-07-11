@@ -39,6 +39,9 @@
       add_action('acf/register_fields', array($this, 'acf_register_fields'));
       add_shortcode('blunt-snippet', array($this, 'do_shortcode'));
       if (!has_filter('widget_text', 'do_shortcode')) {
+        // attempt to not add the filter to widget text more than once
+        // however, this will only work if every developer takes this precaution
+        // like that's gonna happen... I can only do my part
         add_filter('widget_text', 'do_shortcode');
       }
       add_filter('acf/update_value/name=_blunt_snippet_active', array($this, 'copy_active'), 10, 3);
@@ -66,7 +69,8 @@
       return $value;
     } // end public function copy_snippet
     
-    public function do_shortcode($attributes) {
+    public function do_shortcode($attributes, $content='') {
+      // anything in content will be discarded
       if (isset($attributes['id'])) {
         $post_id = $attributes['id'];
         $active = get_post_meta($post_id, '_blunt_snippet_active', true);
