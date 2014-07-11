@@ -3,7 +3,7 @@ Blunt Snippets
 
 WordPress Plugin that let's you embed any HTML, CSS, JavaScript or PHP snippet into content and widgets using shortcodes.
 
-This plugin requires that the Advanced Custom Fields plugin by Elliot Condon be installed and active.
+This plugin works best if the Advanced Custom Fields plugin by Elliot Condon is installed and active.
 
 Create a code snippet then copy and paste the shortcode to wherever you need to embed it...
 
