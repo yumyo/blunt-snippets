@@ -7,7 +7,20 @@
     Author: John A. Huebner II
     Author URI: https://github.com/Hube2
     Version: 1.0.0
-		
+    
+    Blunt Snippets
+    Copyright (C) 2012, John A. Huebner II, hube02@earthlink.net
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details http://www.gnu.org/licenses
+    
   */
   
   new bluntSnippets();
@@ -28,30 +41,30 @@
       if (!has_filter('widget_text', 'do_shortcode')) {
         add_filter('widget_text', 'do_shortcode');
       }
-			add_filter('acf/update_value/name=_blunt_snippet_active', array($this, 'copy_active'), 10, 3);
-			add_filter('acf/update_value/name=_blunt_snippet', array($this, 'copy_snippet'), 10, 3);
-			add_action( 'updated_post_meta', array($this, 'update_post_meta'), 10, 4 );
+      add_filter('acf/update_value/name=_blunt_snippet_active', array($this, 'copy_active'), 10, 3);
+      add_filter('acf/update_value/name=_blunt_snippet', array($this, 'copy_snippet'), 10, 3);
+      add_action( 'updated_post_meta', array($this, 'update_post_meta'), 10, 4 );
     } // end public function __construct
-		
-		public function update_post_meta($meta_id, $post_id, $meta_key, $meta_value) {
-			if (!function_exists('get_field') && 
-					($meta_key == 'blunt_snippet_active' || $meta_key == 'blunt_snippet')) {
-				add_post_meta($post_id, '_'.$meta_key, $meta_value, true);
-				update_post_meta($post_id, '_'.$meta_key, $meta_value);
-			}
-		} // end public function update_post_meta
-		
-		public function copy_active($value, $post_id) {
-			add_post_meta($post_id, 'blunt_snippet_active', $value, true);
-			update_post_meta($post_id, 'blunt_snippet_active', $value);
-			return $value;
-		} // end public function copy_active
-		
-		public function copy_snippet($value, $post_id) {
-			add_post_meta($post_id, 'blunt_snippet', $value, true);
-			update_post_meta($post_id, 'blunt_snippet', $value);
-			return $value;
-		} // end public function copy_snippet
+    
+    public function update_post_meta($meta_id, $post_id, $meta_key, $meta_value) {
+      if (!function_exists('get_field') && 
+          ($meta_key == 'blunt_snippet_active' || $meta_key == 'blunt_snippet')) {
+        add_post_meta($post_id, '_'.$meta_key, $meta_value, true);
+        update_post_meta($post_id, '_'.$meta_key, $meta_value);
+      }
+    } // end public function update_post_meta
+    
+    public function copy_active($value, $post_id) {
+      add_post_meta($post_id, 'blunt_snippet_active', $value, true);
+      update_post_meta($post_id, 'blunt_snippet_active', $value);
+      return $value;
+    } // end public function copy_active
+    
+    public function copy_snippet($value, $post_id) {
+      add_post_meta($post_id, 'blunt_snippet', $value, true);
+      update_post_meta($post_id, 'blunt_snippet', $value);
+      return $value;
+    } // end public function copy_snippet
     
     public function do_shortcode($attributes) {
       if (isset($attributes['id'])) {
@@ -166,7 +179,7 @@
       $post_id = $post->ID;
       switch ($column_name) {
         case 'activesnippet':
-					$active = get_post_meta($post_id, '_blunt_snippet_active', true);
+          $active = get_post_meta($post_id, '_blunt_snippet_active', true);
           if ($active) {
             echo 'Yes';
           } else {
