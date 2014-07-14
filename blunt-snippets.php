@@ -6,7 +6,7 @@
     Description: Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and widgets using shortcodes.
     Author: John A. Huebner II
     Author URI: https://github.com/Hube2
-    Version: 0.0.1
+    Version: 1.1.0
     
     Blunt Snippets
     Copyright (C) 2012, John A. Huebner II, hube02@earthlink.net
@@ -35,8 +35,9 @@
       register_deactivation_hook(__FILE__, array($this, 'deactivate'));
       add_action('init', array($this, 'register_post_type'));
       add_filter('manage_edit-'.$this->post_type.'_columns', array($this, 'admin_columns'));
-      add_action('manage_'.$this->post_type.'_posts_custom_column', array($this, 'admin_columns_content'), 10, 2 );  
-      add_action('acf/register_fields', array($this, 'acf_register_fields'));
+      add_action('manage_'.$this->post_type.'_posts_custom_column', array($this, 'admin_columns_content'), 10, 2 ); 
+      add_action('acf/register_fields', array($this, 'acf_register_fields')); // ACF4
+      add_action('acf/include_fields', array($this, 'acf_include_fields')); // ACF5
       add_shortcode('blunt-snippet', array($this, 'do_shortcode'));
       if (!has_filter('widget_text', 'do_shortcode')) {
         // attempt to not add the filter to widget text more than once
@@ -87,7 +88,99 @@
       return $content;
     } // end public function do_shortcode
     
+    public function acf_include_fields() {
+      // this function is called when ACF5 is installed
+      if (!function_exists('register_field_group')) {
+        return;
+      }
+      $field_group = array('id' => 'acf_bcs_details',
+                           'title' => 'Code Snippet Details',
+                           'fields' => array(array('key' => 'field_acf_bcs_snippet_message',
+                                                   'label' => 'Code Snippets Message',
+                                                   'name' => '',
+                                                   'prefix' => '',
+                                                   'type' => 'message',
+                                                   'instructions' => '',
+                                                   'required' => 0,
+                                                   'conditional_logic' => 0,
+                                                   'message' => 'Code snippets allows you to add whatever code '.
+                                                                'you would like to content areas and widgets on '.
+                                                                'your site. You can include HTML, JavaScript, '.
+                                                                'CSS or even PHP.'."\r\n\r\n".
+                                                                'All code must be enclosed in the correct tags '.
+                                                                'as all code you enter is considered to be HTML. '.
+                                                                'For example if your are adding JavaScript then '.
+                                                                'you would enclose it in &lt;script&gt;'.
+                                                                '&lt;/script&gt; tags. If you\'re creating PHP '.
+                                                                'then you\'d use the proper PHP tags (&lt;?php '.
+                                                                '?&gt;)'."\r\n\r\n".'Note that no syntax '.
+                                                                'checking is done on the code you enter. It '.
+                                                                'is your responsibility to ensure it is '.
+                                                                'working code. You should test the code before '.
+                                                                'inserting in on your site.'."\r\n\r\n".'After '.
+                                                                'you save the code copy the shortcode value for '.
+                                                                'this snippet and paste it into your content or '.
+                                                                'a widget to place the code wherever you need it on '.
+                                                                'your site.'),
+                                             array('key' => 'field_acf_bcs_snippet_active',
+                                                   'label' => 'Active',
+                                                   'name' => '_blunt_snippet_active',
+                                                   'prefix' => '',
+                                                   'type' => 'radio',
+                                                   'instructions' => 'Is this snippet active. Marking a '.
+                                                                     'code snippet inactive will remove it '.
+                                                                     'from your site without needing to '.
+                                                                     'find and remove the code wherever it '.
+                                                                     'is inserting on your site.',
+                                                   'required' => 0,
+                                                   'conditional_logic' => 0,
+                                                   'choices' => array(1 => 'Yes',
+                                                                      0 => 'No',),
+                                                   'other_choice' => 0,
+                                                   'save_other_choice' => 0,
+                                                   'default_value' => 1,
+                                                   'layout' => 'horizontal'),
+                                             array('key' => 'field_acf_bcs_snippet',
+                                                   'label' => 'Code Snippet',
+                                                   'name' => '_blunt_snippet',
+                                                   'prefix' => '',
+                                                   'type' => 'textarea',
+                                                   'instructions' => 'Enter your code snippet.',
+                                                   'required' => 0,
+                                                   'conditional_logic' => 0,
+                                                   'default_value' => '',
+                                                   'placeholder' => '',
+                                                   'maxlength' => '',
+                                                   'rows' => '',
+                                                   'new_lines' => '',
+                                                   'readonly' => 0,
+                                                   'disabled' => 0)),
+                           'location' => array(array(array('param' => 'post_type',
+                                                           'operator' => '==',
+                                                           'value' => 'blunt-snippets'))),
+                           'menu_order' => 0,
+                           'position' => 'acf_after_title',
+                           'style' => 'default',
+                           'label_placement' => 'top',
+                           'instruction_placement' => 'label',
+                           'hide_on_screen' => array(0 => 'permalink',
+                                                     1 => 'the_content',
+                                                     2 => 'excerpt',
+                                                     3 => 'custom_fields',
+                                                     4 => 'discussion',
+                                                     5 => 'comments',
+                                                     6 => 'slug',
+                                                     7 => 'author',
+                                                     8 => 'format',
+                                                     9 => 'featured_image',
+                                                     10 => 'categories',
+                                                     11 => 'tags',
+                                                     12 => 'send-trackbacks'));
+      register_field_group($field_group);
+    } // end public function acf_include_fields
+    
     public function acf_register_fields() {
+      // this function in called when ACF4 is installed
       if (!function_exists('register_field_group')) {
         return;
       }
@@ -98,7 +191,7 @@
                                                    'name' => '',
                                                    'type' => 'message',
                                                    'message' => 'Code snippets allows you to add whatever code '.
-                                                                 'you would like to content areas and widgets on '.
+                                                                'you would like to content areas and widgets on '.
                                                                 'your site. You can include HTML, JavaScript, '.
                                                                 'CSS or even PHP.'."\r\n\r\n".
                                                                 'All code must be enclosed in the correct tags '.
