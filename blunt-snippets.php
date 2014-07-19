@@ -22,6 +22,9 @@
     GNU General Public License for more details http://www.gnu.org/licenses
     
   */
+	
+	// If this file is called directly, abort.
+	if (!defined('WPINC')) {die;}
   
   new bluntSnippets();
   
