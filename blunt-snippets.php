@@ -6,7 +6,7 @@
     Description: Allows adding of any code snippets (HTML, JS, CSS, PHP, whatever) to content and widgets using shortcodes.
     Author: John A. Huebner II
     Author URI: https://github.com/Hube2
-    Version: 1.1.0
+    Version: 1.1.1
     
     Blunt Snippets
     Copyright (C) 2012, John A. Huebner II, hube02@earthlink.net
@@ -50,8 +50,28 @@
       }
       add_filter('acf/update_value/name=_blunt_snippet_active', array($this, 'copy_active'), 10, 3);
       add_filter('acf/update_value/name=_blunt_snippet', array($this, 'copy_snippet'), 10, 3);
-      add_action( 'updated_post_meta', array($this, 'update_post_meta'), 10, 4 );
+      add_action('updated_post_meta', array($this, 'update_post_meta'), 10, 4);
+			
+			add_filter('acf/render_field/type=message',  array($this, 'render_message'), 0, 1); // ACF5
+			add_filter('acf/create_field/type=message',  array($this, 'render_message'), 0, 1); // ACF4
     } // end public function __construct
+		
+		public function render_message($field) {
+			//Default Social Link Icon
+			//echo '<pre>('; print_r($field); echo ')</pre>';
+			$label = $field['label'];
+			//echo '<pre>';print_r($field);print_r($_GET);echo '</pre>';
+			if (strtolower(trim($label)) == 'code snippet shortcode') {
+				//echo '<pre>';print_r($field);print_r($_GET);echo '</pre>';
+				$field = array();
+				if (!isset($_GET['post'])) {
+					echo '<em>Save Code Snippet to see Shortcode</em>';
+				} else {
+					$post_id = $_GET['post'];
+					echo '[blunt-snippet id="',$post_id,'"]';
+				}
+			}
+		} // end public function render_message
     
     public function update_post_meta($meta_id, $post_id, $meta_key, $meta_value) {
       if (!function_exists('get_field') && 
@@ -98,8 +118,17 @@
       }
       $field_group = array('id' => 'acf_bcs_details',
                            'title' => 'Code Snippet Details',
-                           'fields' => array(array('key' => 'field_acf_bcs_snippet_message',
-                                                   'label' => 'Code Snippets Message',
+                           'fields' => array(array('key' => 'field_acf_bcs_shortcode',
+																									 'label' => 'Code Snippet Shortcode',
+																									 'name' => '',
+																									 'prefix' => '',
+																									 'type' => 'message',
+																									 'instructions' => '',
+																									 'required' => 0,
+																									 'conditional_logic' => 0,
+																									 'message' => ''),
+																						 array('key' => 'field_acf_bcs_snippet_message',
+                                                   'label' => 'Code Snippet Instructions',
                                                    'name' => '',
                                                    'prefix' => '',
                                                    'type' => 'message',
@@ -189,8 +218,13 @@
       }
       $field_group = array('id' => 'acf_bcs-details',
                            'title' => 'Code Snippet Details',
-                           'fields' => array(array('key' => '_acf_bcs_snippet_message',
-                                                   'label' => 'Code Snippets Message',
+                           'fields' => array(array('key' => 'field_acf_bcs_shortcode',
+                                                   'label' => 'Code Snippet Shortcode',
+                                                   'name' => '',
+                                                   'type' => 'message',
+                                                   'message' => ''),
+                                             array('key' => '_acf_bcs_snippet_message',
+                                                   'label' => 'Code Snippets Instructions',
                                                    'name' => '',
                                                    'type' => 'message',
                                                    'message' => 'Code snippets allows you to add whatever code '.
@@ -212,7 +246,7 @@
                                                                 'this snippet and paste it into your content or '.
                                                                 'a widget to place the code wherever you need it on '.
                                                                 'your site.'),
-                                             array('key' => '_acf_bcs_snippet_active',
+																						 array('key' => '_acf_bcs_snippet_active',
                                                    'label' => 'Active',
                                                    'name' => '_blunt_snippet_active',
                                                    'type' => 'radio',
@@ -261,7 +295,7 @@
     public function admin_columns($columns) {
       $new_columns = array();
       foreach ($columns as $index => $column) {
-        if (strtolower($column) == 'title') {
+        if ($index == 'title') {
           $new_columns[$index] = $column;
           $new_columns['activesnippet'] = __('Active');
           $new_columns['shortcode'] = __('Shortcode');
@@ -274,9 +308,7 @@
       return $new_columns;
     } // end public function admin_columns
     
-    public function admin_columns_content($column_name, $column_id) {
-      global $post;
-      $post_id = $post->ID;
+    public function admin_columns_content($column_name, $post_id) {
       switch ($column_name) {
         case 'activesnippet':
           $active = get_post_meta($post_id, '_blunt_snippet_active', true);
